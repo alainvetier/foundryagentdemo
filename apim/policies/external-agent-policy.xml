@@ -1,0 +1,24 @@
+<!-- Optional Topic 11B. Only this agent API is changed; MCP response bodies are never read. -->
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@(context.Request.Headers.GetValueOrDefault(&quot;x-whisker-action&quot;, &quot;read-only&quot;) != &quot;read-only&quot;)">
+                <return-response>
+                    <set-status code="403" reason="Read-only agent" />
+                    <set-header name="Content-Type" exists-action="override"><value>application/json</value></set-header>
+                    <set-body>{"message":"APIM blocked this action. Kernel Panic ACA exposes read-only operations only.","enforced_by":"apim"}</set-body>
+                </return-response>
+            </when>
+        </choose>
+        <rate-limit-by-key calls="10" renewal-period="60" counter-key="@(&quot;whisker-aca:&quot; + context.Subscription.Id)" remaining-calls-header-name="x-remaining-agent-calls" />
+        <trace source="whisker-aca" severity="information">
+            <message>Kernel Panic ACA request passed gateway controls.</message>
+        </trace>
+        <set-backend-service base-url="__BACKEND_URL__" />
+        <authentication-managed-identity resource="__BACKEND_AUDIENCE__" />
+    </inbound>
+    <backend><forward-request timeout="120" /></backend>
+    <outbound><base /></outbound>
+    <on-error><base /></on-error>
+</policies>

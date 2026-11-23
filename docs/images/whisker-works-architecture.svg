@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1260" viewBox="0 0 1440 1260" role="img" aria-labelledby="title desc">
+  <title id="title">Whisker Works architecture: three clear request paths</title>
+  <desc id="desc">Read each row from left to right. Purple solid arrows show direct Foundry agent chat. Teal dashed arrows show APIM-governed MCP and Store API traffic, blue dashed arrows show APIM-governed model inference, and orange dashed arrows show APIM-governed A2A traffic. The customer uses the storefront, which calls the Whiskers pro-code agent in Foundry. Store tool requests pass through the APIM Layer 2 MCP gateway to the Store API. Foundry agents use their configured models, knowledge, and Code Interpreter within Foundry, not through the APIM Models API. Separately, direct model clients use APIM Layer 1 to reach Foundry models. An A2A caller uses APIM Layer 3 to reach the wellness agent, which then uses the Layer 1 model path. Responses return along the same paths; return arrows and telemetry arrows are omitted for clarity.</desc>
+  <defs>
+    <marker id="arrow-agent" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#7952b3"/>
+    </marker>
+    <marker id="arrow-tool" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#087e74"/>
+    </marker>
+    <marker id="arrow-model" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#1769b2"/>
+    </marker>
+    <marker id="arrow-a2a" markerUnits="userSpaceOnUse" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#b45309"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 700; }
+      .heading { font-size: 24px; font-weight: 700; }
+      .label { font-size: 21px; font-weight: 700; }
+      .body { font-size: 19px; fill: #334155; }
+      .small { font-size: 18px; fill: #475569; }
+      .edge-label { font-size: 18px; font-weight: 600; text-anchor: middle; }
+      .step { font-size: 18px; font-weight: 700; fill: #fff; text-anchor: middle; }
+      .client { fill: #ecfdf5; stroke: #15806b; stroke-width: 2; }
+      .foundry { fill: #f5f0ff; stroke: #7952b3; stroke-width: 2; }
+      .gateway { fill: #eff6ff; stroke: #2471b5; stroke-width: 2; }
+      .service { fill: #fff7ed; stroke: #b86e24; stroke-width: 2; }
+      .edge { fill: none; stroke-width: 2.5; }
+      .governed { stroke-dasharray: 8 5; }
+      .edge.agent { stroke: #7952b3; marker-end: url(#arrow-agent); }
+      .edge.tool { stroke: #087e74; marker-end: url(#arrow-tool); }
+      .edge.model { stroke: #1769b2; marker-end: url(#arrow-model); }
+      .edge.a2a { stroke: #b45309; marker-end: url(#arrow-a2a); }
+      text.agent { fill: #7952b3; }
+      text.tool { fill: #087e74; }
+      text.model { fill: #1769b2; }
+      text.a2a { fill: #b45309; }
+    </style>
+  </defs>
+  <rect width="1440" height="1260" fill="#fff"/>
+  <text x="40" y="52" class="title">Whisker Works architecture</text>
+  <text x="40" y="86" class="body">Read each row left to right. Arrows show requests; responses return along the same path.</text>
+
+  <!-- Customer journey: all connectors stay in the gaps between cards. -->
+  <rect x="24" y="116" width="1392" height="424" rx="18" fill="#f8fafc" stroke="#dbe3ec"/>
+  <text x="44" y="154" class="heading">Start here: a shopper asks Whiskers</text>
+  <text x="44" y="183" class="small">Customer experience + Layer 2 tool governance</text>
+
+  <rect x="44" y="222" width="234" height="116" rx="12" class="client"/>
+  <circle cx="68" cy="222" r="15" fill="#15806b"/>
+  <text x="68" y="228" class="step">1</text>
+  <text x="62" y="259" class="label">Storefront</text>
+  <text x="62" y="290" class="small">Customer browses</text>
+  <text x="62" y="316" class="small">and chats with Whiskers</text>
+
+  <path d="M288 280 H402" class="edge agent"/>
+  <text x="345" y="258" class="edge-label agent">Chat</text>
+
+  <rect x="412" y="222" width="244" height="116" rx="12" class="foundry"/>
+  <circle cx="436" cy="222" r="15" fill="#7952b3"/>
+  <text x="436" y="228" class="step">2</text>
+  <text x="430" y="259" class="label">Whiskers agent</text>
+  <text x="430" y="290" class="small">Foundry Agent Service</text>
+  <text x="430" y="316" class="small">whiskers-concierge-pro</text>
+
+  <path d="M666 280 H780" class="edge tool governed"/>
+  <text x="723" y="258" class="edge-label tool">Tool call</text>
+
+  <rect x="790" y="222" width="234" height="116" rx="12" class="gateway"/>
+  <circle cx="814" cy="222" r="15" fill="#2471b5"/>
+  <text x="814" y="228" class="step">3</text>
+  <text x="808" y="259" class="label">APIM MCP gateway</text>
+  <text x="808" y="290" class="small">Layer 2: /whisker-mcp</text>
+  <text x="808" y="316" class="small">Access, limits, tracing</text>
+
+  <path d="M1034 280 H1152" class="edge tool governed"/>
+  <text x="1093" y="258" class="edge-label tool">API call</text>
+
+  <rect x="1162" y="222" width="234" height="116" rx="12" class="service"/>
+  <circle cx="1186" cy="222" r="15" fill="#b86e24"/>
+  <text x="1186" y="228" class="step">4</text>
+  <text x="1180" y="259" class="label">Store API</text>
+  <text x="1180" y="290" class="small">Products, live inventory,</text>
+  <text x="1180" y="316" class="small">orders and cat facts</text>
+
+  <rect x="44" y="362" width="1352" height="95" rx="12" class="foundry"/>
+  <text x="62" y="394" class="label">Inside Foundry: the agent's built-in capabilities</text>
+  <text x="62" y="424" class="body">Configured model + knowledge retrieval + sales CSV analysis with Code Interpreter</text>
+  <text x="44" y="490" class="small">Prompt-agent model calls stay in Foundry; they do not automatically pass through APIM /models.</text>
+  <text x="44" y="518" class="small">Storefront and Store API run on App Service. Tool results return to the agent before it answers.</text>
+
+  <path d="M44 572 H92" class="edge agent"/>
+  <text x="104" y="578" class="small agent">Foundry agent chat</text>
+  <path d="M340 572 H388" class="edge tool governed"/>
+  <text x="400" y="578" class="small tool">MCP / store tools</text>
+  <path d="M630 572 H678" class="edge model governed"/>
+  <text x="690" y="578" class="small model">Model inference</text>
+  <path d="M910 572 H958" class="edge a2a governed"/>
+  <text x="970" y="578" class="small a2a">A2A agent calls</text>
+  <text x="44" y="610" class="small">Arrow key: color identifies traffic; solid = direct Foundry call; dashed = APIM-governed path.</text>
+
+  <text x="40" y="654" class="heading">Two other gateway entry points</text>
+  <text x="580" y="654" class="small">Separate demo paths, not extra steps in the shopper's request.</text>
+
+  <!-- Layer 1 and Layer 3 use independent, straight request lanes. -->
+  <text x="40" y="690" class="label">Layer 1: govern direct model requests</text>
+  <rect x="40" y="710" width="300" height="108" rx="12" class="client"/>
+  <text x="60" y="749" class="label">Model clients</text>
+  <text x="60" y="782" class="small">VS Code / Python tests</text>
+  <path d="M350 764 H560" class="edge model governed"/>
+  <text x="455" y="743" class="edge-label model">Model call</text>
+  <rect x="570" y="710" width="300" height="108" rx="12" class="gateway"/>
+  <text x="590" y="749" class="label">APIM Models API</text>
+  <text x="590" y="782" class="small">/models</text>
+  <path d="M880 764 H1090" class="edge model governed"/>
+  <text x="985" y="743" class="edge-label model">Inference</text>
+  <rect x="1100" y="710" width="300" height="108" rx="12" class="foundry"/>
+  <text x="1120" y="749" class="label">Foundry models</text>
+  <text x="1120" y="782" class="small">gpt-4.1-mini / gpt-5-mini</text>
+  <text x="40" y="850" class="small">Gateway controls: token limits, Content Safety, managed identity and token metrics.</text>
+
+  <text x="40" y="895" class="label">Layer 3: govern calls to another agent</text>
+  <rect x="40" y="921" width="300" height="108" rx="12" class="client"/>
+  <text x="60" y="960" class="label">A2A demo caller</text>
+  <text x="60" y="993" class="small">Asks a wellness question</text>
+  <path d="M350 978 H560" class="edge a2a governed"/>
+  <text x="455" y="957" class="edge-label a2a">A2A call</text>
+  <rect x="570" y="921" width="300" height="108" rx="12" class="gateway"/>
+  <text x="590" y="960" class="label">APIM agent gateway</text>
+  <text x="590" y="993" class="small">/wellness-agent</text>
+  <path d="M880 978 H1090" class="edge a2a governed"/>
+  <text x="985" y="957" class="edge-label a2a">Forward</text>
+  <rect x="1100" y="921" width="300" height="108" rx="12" class="service"/>
+  <text x="1120" y="960" class="label">Dr. Meowgan Freeman</text>
+  <text x="1120" y="993" class="small">Feline wellness agent</text>
+  <text x="40" y="1061" class="small">Next: the wellness agent makes its model requests through the Layer 1 path shown above.</text>
+
+  <rect x="24" y="1094" width="1392" height="142" rx="16" fill="#f8fafc" stroke="#dbe3ec"/>
+  <text x="44" y="1125" class="label">Also in the demo</text>
+  <text x="44" y="1155" class="small">Layer 2 also serves low-code and Kernel Panic hosted agents, and proxies Learn MCP at /learn-mcp.</text>
+  <text x="44" y="1186" class="small">Kernel Panic uses Agent Framework, Foundry models and approval-gated Python write tools.</text>
+  <text x="44" y="1217" class="small">Observability: configured Foundry traces + APIM diagnostics in Application Insights / Log Analytics.</text>
+</svg>

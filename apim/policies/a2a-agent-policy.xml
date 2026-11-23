@@ -1,0 +1,27 @@
+<!--
+  LAYER 3 - AGENTS governance (paste into: APIM > APIs > <A2A agent API> > A2A > Policies)
+  - Throttle agent-to-agent traffic per caller
+  - Prompt Shields on messages sent to the remote agent
+  - Custom metric: A2A calls per caller (who talks to which agent)
+-->
+<policies>
+    <inbound>
+        <base />
+        <rate-limit-by-key calls="20" renewal-period="60" counter-key="@(context.Subscription?.Id ?? context.Request.IpAddress)" remaining-calls-header-name="x-remaining-agent-calls" />
+        <llm-content-safety backend-id="whisker-content-safety" shield-prompt="true" />
+        <emit-metric name="a2a-requests" value="1" namespace="whisker-works">
+            <dimension name="API ID" />
+            <dimension name="Subscription ID" />
+            <dimension name="Caller Agent" value="@(context.Request.Headers.GetValueOrDefault("x-agent-id", "unknown"))" />
+        </emit-metric>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

@@ -1,0 +1,37 @@
+month,product_id,product_name,category,units_sold,revenue_usd,returns
+2026-04,WW-001,Laser Pointer Pro 9000,toys,310,6196.90,4
+2026-04,WW-002,Keyboard Warmer Nap Pad,beds,180,6298.20,6
+2026-04,WW-005,Kubernetes Scratching Pod,furniture,42,3738.00,1
+2026-04,WW-006,Git Commit Treats (Salmon),food,820,5321.80,0
+2026-04,WW-009,Zero-Downtime Water Fountain,accessories,95,4274.05,3
+2026-04,WW-011,Sudo Make Me A Sandwich Kibble (Chicken),food,260,6497.40,0
+2026-05,WW-001,Laser Pointer Pro 9000,toys,295,5897.05,3
+2026-05,WW-002,Keyboard Warmer Nap Pad,beds,150,5248.50,5
+2026-05,WW-005,Kubernetes Scratching Pod,furniture,51,4539.00,2
+2026-05,WW-006,Git Commit Treats (Salmon),food,870,5646.30,0
+2026-05,WW-009,Zero-Downtime Water Fountain,accessories,120,5398.80,2
+2026-05,WW-011,Sudo Make Me A Sandwich Kibble (Chicken),food,275,6872.25,0
+2026-06,WW-001,Laser Pointer Pro 9000,toys,340,6796.60,5
+2026-06,WW-002,Keyboard Warmer Nap Pad,beds,90,3149.10,2
+2026-06,WW-005,Kubernetes Scratching Pod,furniture,48,4272.00,1
+2026-06,WW-006,Git Commit Treats (Salmon),food,910,5905.90,0
+2026-06,WW-009,Zero-Downtime Water Fountain,accessories,165,7423.35,4
+2026-06,WW-011,Sudo Make Me A Sandwich Kibble (Chicken),food,281,7022.19,0
+2026-07,WW-001,Laser Pointer Pro 9000,toys,360,7196.40,6
+2026-07,WW-002,Keyboard Warmer Nap Pad,beds,70,2449.30,1
+2026-07,WW-005,Kubernetes Scratching Pod,furniture,55,4895.00,2
+2026-07,WW-006,Git Commit Treats (Salmon),food,940,6100.60,0
+2026-07,WW-009,Zero-Downtime Water Fountain,accessories,210,9447.90,5
+2026-07,WW-011,Sudo Make Me A Sandwich Kibble (Chicken),food,290,7247.10,0
+2026-08,WW-001,Laser Pointer Pro 9000,toys,335,6696.65,4
+2026-08,WW-002,Keyboard Warmer Nap Pad,beds,85,2974.15,2
+2026-08,WW-005,Kubernetes Scratching Pod,furniture,60,5340.00,1
+2026-08,WW-006,Git Commit Treats (Salmon),food,905,5873.45,0
+2026-08,WW-009,Zero-Downtime Water Fountain,accessories,190,8548.10,3
+2026-08,WW-011,Sudo Make Me A Sandwich Kibble (Chicken),food,300,7497.00,0
+2026-09,WW-001,Laser Pointer Pro 9000,toys,320,6396.80,3
+2026-09,WW-002,Keyboard Warmer Nap Pad,beds,160,5598.40,4
+2026-09,WW-005,Kubernetes Scratching Pod,furniture,66,5874.00,2
+2026-09,WW-006,Git Commit Treats (Salmon),food,960,6230.40,0
+2026-09,WW-009,Zero-Downtime Water Fountain,accessories,140,6298.60,2
+2026-09,WW-011,Sudo Make Me A Sandwich Kibble (Chicken),food,310,7746.90,0

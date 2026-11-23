@@ -1,0 +1,8 @@
+<!--
+  OPTIONAL (Layer 1, multi-region) - load-balance across several Foundry/Azure OpenAI backends.
+  Prerequisite: create a backend pool named "foundry-pool" (type Pool) that references
+  2+ backends with priority/weight, each with a circuit breaker.
+  Docs: https://learn.microsoft.com/azure/api-management/backends#load-balanced-pool
+  Replace <set-backend-service backend-id="whisker-foundry-models" /> in models-api-policy.xml with the line below.
+-->
+<set-backend-service backend-id="foundry-pool" />

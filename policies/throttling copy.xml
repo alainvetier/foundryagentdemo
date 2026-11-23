@@ -1,0 +1,42 @@
+<policies>
+    <inbound>
+        <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" ignore-error="false" />
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+        </set-header>
+        <azure-openai-emit-token-metric namespace="genaitest">
+            <dimension name="Subscription ID" />
+            <dimension name="Client IP" value="@(context.Request.IpAddress)" />
+        </azure-openai-emit-token-metric>
+        <azure-openai-token-limit counter-key="@(context.Request.IpAddress)" tokens-per-minute="5000" estimate-prompt-tokens="false" remaining-tokens-variable-name="remainingTokens" />
+        <azure-openai-token-limit counter-key="@(context.Subscription.Id)" token-quota="100000" token-quota-period="Monthly" estimate-prompt-tokens="false" remaining-quota-tokens-variable-name="remainingQuotaTokens" />
+        <base />
+        <!-- Try primary backend first, switch to secondary on 429 -->
+        <set-variable name="originalUrl" value="@(context.Request.Url.ToString())" />
+        <cache-lookup-value key="throttled" variable-name="isThrottled" />
+        <choose>
+            <when condition="@(context.Variables.GetValueOrDefault&lt;bool&gt;("isThrottled"))">
+                <set-backend-service backend-id="apim-oai-openai-aue-endpoint" />
+                <cache-remove-value key="throttled" />
+            </when>
+            <otherwise>
+                <set-backend-service backend-id="apim-oai-jpn-endpoint" />
+            </otherwise>
+        </choose>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <!-- If we get a 429, mark as throttled for the next request -->
+        <choose>
+            <when condition="@(context.Response.StatusCode == 429)">
+                <cache-store-value key="throttled" value="true" duration="60" />
+            </when>
+        </choose>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

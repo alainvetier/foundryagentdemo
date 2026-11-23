@@ -1,0 +1,70 @@
+# Creates a new version of the pro-code agent when agent.yaml / instructions change on main,
+# then compares it with the previous version on the eval set.
+# Setup: docs/08-change-model-safely.md (OIDC federated credential + repo variables/secrets).
+name: update-agent
+
+on:
+  push:
+    branches: [main]
+    paths: ["agents/procode/agent.yaml", "agents/procode/instructions.md"]
+  pull_request:
+    paths: ["agents/procode/agent.yaml", "agents/procode/instructions.md"]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Validate agent.yaml
+        run: |
+          pip install pyyaml
+          python - <<'PY'
+          import yaml, pathlib
+          cfg = yaml.safe_load(pathlib.Path("agents/procode/agent.yaml").read_text())
+          for k in ("name", "model", "instructions_file"):
+              assert cfg.get(k), f"agent.yaml: missing '{k}'"
+          print(f"OK: {cfg['name']} -> model {cfg['model']}")
+          PY
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: demo
+    env:
+      FOUNDRY_PROJECT_ENDPOINT: ${{ vars.FOUNDRY_PROJECT_ENDPOINT }}
+      APIM_GATEWAY_URL: ${{ vars.APIM_GATEWAY_URL }}
+      APIM_MCP_PATH: whisker-mcp
+      MCP_PROJECT_CONNECTION_NAME: ${{ vars.MCP_PROJECT_CONNECTION_NAME }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Create new agent version
+        working-directory: agents/procode
+        run: |
+          pip install -r requirements.txt
+          python create_agent.py | tee create.log
+          echo "NEW_VERSION=$(grep -oP 'version=\K[^ ]+' create.log)" >> "$GITHUB_ENV"
+      - name: Compare with previous version
+        if: env.NEW_VERSION != '1'
+        working-directory: agents/procode
+        run: python compare_models.py --a $((NEW_VERSION - 1)) --b $NEW_VERSION
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: agent-comparison
+          path: agents/procode/results/
+          if-no-files-found: ignore

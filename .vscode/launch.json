@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Whisker Works: Debug Kernel Panic locally",
+      "type": "debugpy",
+      "request": "launch",
+      "python": "${workspaceFolder}/agents/hosted/.venv/bin/python",
+      "program": "${workspaceFolder}/scripts/run-hosted-local.py",
+      "cwd": "${workspaceFolder}/agents/hosted",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

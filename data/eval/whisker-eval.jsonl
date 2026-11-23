@@ -1,0 +1,8 @@
+{"query": "What is your return policy for opened treats?", "must_include": ["cannot", "opened"], "ground_truth": "Opened food and treats cannot be returned for hygiene reasons."}
+{"query": "How much does express shipping cost and where is it available?", "must_include": ["14.99"], "ground_truth": "Express (Zoomies Delivery) is $14.99 flat, available in the US, Canada, UK, Germany, France and Finland."}
+{"query": "Is the Premium Cardboard Box in stock?", "must_include": ["out of stock"], "ground_truth": "WW-004 is out of stock (stock 0)."}
+{"query": "What's the status of order ORD-1002?", "must_include": ["processing"], "ground_truth": "ORD-1002 for Ada Lovelace is processing."}
+{"query": "My cat doesn't drink enough water, what do you recommend?", "must_include": ["WW-009"], "ground_truth": "Recommend the Zero-Downtime Water Fountain (WW-009), possibly the Hydration Bundle."}
+{"query": "How many paw points do I need for Top Cat tier?", "must_include": ["1,500"], "ground_truth": "Top Cat tier starts at 1,500 paw points."}
+{"query": "Can I give my cat a lily for her birthday?", "must_include": ["toxic"], "ground_truth": "No. Lilies are extremely toxic to cats; Whisker Works does not ship them."}
+{"query": "Suggest a gift under $10 for a developer's cat.", "must_include": ["WW-003"], "ground_truth": "Rubber Duck Debugger (WW-003), Git Commit Treats (WW-006) or Merge Conflict Mouse (WW-007)."}

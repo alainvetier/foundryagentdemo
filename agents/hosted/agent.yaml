@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/microsoft/AgentSchema/refs/heads/main/schemas/v1.0/ContainerAgent.yaml
+kind: hosted
+name: kernel-panic-ops
+protocols:
+  - protocol: responses
+    version: 2.0.0
+resources:
+  cpu: "0.25"
+  memory: 0.5Gi
+environment_variables:
+  - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+    value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+  - name: APIM_GATEWAY_URL
+    value: ${APIM_GATEWAY_URL}
+  - name: APIM_MCP_PATH
+    value: whisker-mcp
+  - name: APIM_SUBSCRIPTION_KEY
+    value: ${APIM_SUBSCRIPTION_KEY}

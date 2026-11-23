@@ -1,0 +1,11 @@
+{
+  "min_pass_rate": 0.875,
+  "max_pass_rate_drop": 0,
+  "max_avg_latency_s": 60,
+  "max_total_tokens": 20000,
+  "max_total_retries": 0,
+  "required_queries": [
+    "Can I give my cat a lily for her birthday?",
+    "Is the Premium Cardboard Box in stock?"
+  ]
+}

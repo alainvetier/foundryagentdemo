@@ -1,0 +1,139 @@
+# INACTIVE SAMPLE: manual only even after deliberate installation under .github/workflows.
+# Produces evaluated and approved release evidence; it does NOT change a production consumer.
+name: whisker-agent-release
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_version:
+        description: Explicit known-good version of whiskers-concierge-pro-release in staging
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: whisker-agent-release
+  cancel-in-progress: false
+jobs:
+  offline-checks:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r agents/procode/requirements.txt
+      - run: |
+          python -m unittest discover -s tests -p test_create_agent.py -v
+          python -m unittest discover -s tests -p test_compare_models.py -v
+          python -m unittest discover -s tests -p test_agent_release.py -v
+
+  candidate:
+    needs: offline-checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: agent-staging
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      FOUNDRY_PROJECT_ENDPOINT: ${{ vars.FOUNDRY_PROJECT_ENDPOINT }}
+      APIM_GATEWAY_URL: ${{ vars.APIM_GATEWAY_URL }}
+      MCP_PROJECT_CONNECTION_NAME: ${{ vars.MCP_PROJECT_CONNECTION_NAME }}
+      BASELINE_VERSION: ${{ inputs.baseline_version }}
+      RELEASE_AGENT_NAME: whiskers-concierge-pro-release
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Check staging inputs before authentication or version creation
+        run: |
+          python - <<'PY'
+          import os, re
+          for name in ("FOUNDRY_PROJECT_ENDPOINT", "APIM_GATEWAY_URL", "MCP_PROJECT_CONNECTION_NAME"):
+              if not os.environ.get(name, "").strip():
+                  raise ValueError(f"Configure staging variable {name}")
+          if not re.fullmatch(r"[1-9]\d*", os.environ["BASELINE_VERSION"]):
+              raise ValueError("baseline_version must be an explicit positive version number")
+          PY
+      - uses: azure/login@8216e11d8cd9b42fe925c852af8e76311ff067ac # v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      - run: python -m pip install -r agents/procode/requirements.txt
+      - run: mkdir -p release
+      - name: Create an isolated candidate and capture the returned identity
+        working-directory: agents/procode
+        run: |
+          python create_agent.py --name "$RELEASE_AGENT_NAME" --output-json ../../release/candidate.json
+      - name: Compare exact baseline and candidate on the same dataset
+        working-directory: agents/procode
+        run: |
+          CANDIDATE_VERSION=$(python -c 'import json; print(json.load(open("../../release/candidate.json"))["version"])')
+          test "$BASELINE_VERSION" != "$CANDIDATE_VERSION"
+          python compare_models.py --agent "$RELEASE_AGENT_NAME" \
+            --a "$BASELINE_VERSION" --b "$CANDIDATE_VERSION" --max-retries 2 \
+            --dataset ../../data/eval/whisker-eval.jsonl --output ../../release/comparison.json
+      - name: Fail closed on quality, regression, required cases, latency, tokens, or retries
+        run: |
+          python scripts/check-agent-release.py \
+            --results release/comparison.json --candidate release/candidate.json \
+            --dataset data/eval/whisker-eval.jsonl --baseline "$BASELINE_VERSION" \
+            --policy samples/agent-lifecycle/gate-policy.json \
+            --revision "$GITHUB_SHA" --output release/evaluation-gate.json
+      - name: Retain evaluation evidence even when a gate fails
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: whisker-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: release/
+          retention-days: 7
+          if-no-files-found: warn
+
+  approve-release-record:
+    needs: candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: agent-release-approval
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: whisker-evaluation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: release
+      - name: Record approval without pretending to deploy or switch traffic
+        env:
+          BASELINE_VERSION: ${{ inputs.baseline_version }}
+        run: |
+          python scripts/check-agent-release.py \
+            --results release/comparison.json --candidate release/candidate.json \
+            --dataset data/eval/whisker-eval.jsonl --baseline "$BASELINE_VERSION" \
+            --policy samples/agent-lifecycle/gate-policy.json \
+            --revision "$GITHUB_SHA" --output release/evaluation-gate.json
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          report = json.loads(Path("release/evaluation-gate.json").read_text())
+          report["approval_environment"] = "agent-release-approval"
+          report["promotion_status"] = "not_deployed"
+          report["workflow_run_url"] = f'{os.environ["GITHUB_SERVER_URL"]}/{os.environ["GITHUB_REPOSITORY"]}/actions/runs/{os.environ["GITHUB_RUN_ID"]}'
+          Path("release/release-record.json").write_text(json.dumps(report, indent=2) + "\n")
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: whisker-approved-release-${{ github.run_id }}-${{ github.run_attempt }}
+          path: release/release-record.json
+          retention-days: 30
+          if-no-files-found: error

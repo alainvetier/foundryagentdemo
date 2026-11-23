@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="570" viewBox="0 0 1500 570" role="img" aria-labelledby="title desc">
+  <title id="title">Agent model update and evaluation lifecycle</title>
+  <desc id="desc">A model change is made on a branch, validated in a pull request, merged, deployed as a new agent version, and compared with the previous version before promotion.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/></marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 16px; fill: #596980; }
+      .head { font-size: 17px; font-weight: 700; }
+      .body { font-size: 14px; fill: #4c5d73; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 3; marker-end: url(#arrow); }
+      .card { fill: #fff; stroke: #d3ddeb; stroke-width: 2; }
+    </style>
+  </defs>
+  <rect width="1500" height="570" fill="#f3f6fb"/>
+  <text x="54" y="62" class="title">Change the model. Keep the release measurable.</text>
+  <text x="56" y="94" class="sub">A model change becomes a reviewable agent version, not an invisible edit.</text>
+
+  <rect x="42" y="180" width="220" height="156" rx="18" class="card"/>
+  <text x="66" y="220" class="head">1. Branch</text>
+  <text x="66" y="255" class="body">Create a focused</text>
+  <text x="66" y="281" class="body">change in Git</text>
+  <text x="66" y="312" class="body">Review the diff</text>
+
+  <rect x="337" y="180" width="220" height="156" rx="18" class="card"/>
+  <text x="361" y="220" class="head">2. Validate</text>
+  <text x="361" y="255" class="body">Check agent.yaml</text>
+  <text x="361" y="281" class="body">in the pull request</text>
+  <text x="361" y="312" class="body">Review before merge</text>
+
+  <rect x="632" y="180" width="220" height="156" rx="18" class="card"/>
+  <text x="656" y="220" class="head">3. Create version</text>
+  <text x="656" y="255" class="body">Merge triggers</text>
+  <text x="656" y="281" class="body">GitHub Actions</text>
+  <text x="656" y="312" class="body">Foundry version N+1</text>
+
+  <rect x="927" y="180" width="220" height="156" rx="18" class="card"/>
+  <text x="951" y="220" class="head">4. Evaluate</text>
+  <text x="951" y="255" class="body">Same prompts and</text>
+  <text x="951" y="281" class="body">checks on both versions</text>
+  <text x="951" y="312" class="body">Compare quality and use</text>
+
+  <rect x="1222" y="180" width="236" height="156" rx="18" fill="#eff9f5" stroke="#a8d7c6" stroke-width="2"/>
+  <text x="1246" y="220" class="head">5. Decide</text>
+  <text x="1246" y="255" class="body">Promote if results</text>
+  <text x="1246" y="281" class="body">meet expectations</text>
+  <text x="1246" y="312" class="body">Otherwise revert</text>
+
+  <path d="M274 258 H325" class="edge"/>
+  <path d="M569 258 H620" class="edge"/>
+  <path d="M864 258 H915" class="edge"/>
+  <path d="M1159 258 H1210" class="edge"/>
+
+  <rect x="337" y="400" width="810" height="92" rx="18" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="368" y="438" class="head">Evaluation evidence</text>
+  <text x="368" y="469" class="body">Pass rate · response quality · latency · tokens · saved comparison results</text>
+  <path d="M1037 338 V382 H741 V388" class="edge"/>
+</svg>

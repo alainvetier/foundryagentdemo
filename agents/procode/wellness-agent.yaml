@@ -1,0 +1,10 @@
+name: whiskers-wellness-concierge
+description: "Whiskers' isolated A2A demo: delegates cat wellness questions to Dr. Meowgan Freeman through APIM."
+model: gpt-4.1-mini
+instructions_file: wellness-instructions.md
+
+# The existing wellness service implements A2A 0.3, which uses Foundry's preview tool.
+a2a:
+  enabled: true
+  path: wellness-agent
+  project_connection_name: whisker-wellness-a2a

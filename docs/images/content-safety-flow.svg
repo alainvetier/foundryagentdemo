@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="690" viewBox="0 0 1500 690" role="img" aria-labelledby="title desc">
+  <title id="title">Content Safety policy decision at the APIM gateway</title>
+  <desc id="desc">A request enters APIM, where a Content Safety policy checks it using the Azure AI Content Safety backend. Safe requests continue to the Foundry model; detected attacks are blocked at the gateway.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/></marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#16877a"/></marker>
+    <marker id="arrowRed" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#c65353"/></marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 16px; fill: #596980; }
+      .head { font-size: 19px; font-weight: 700; }
+      .body { font-size: 15px; fill: #4c5d73; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 4; marker-end: url(#arrow); }
+      .safe { fill: none; stroke: #16877a; stroke-width: 4; marker-end: url(#arrowGreen); }
+      .blocked { fill: none; stroke: #c65353; stroke-width: 4; marker-end: url(#arrowRed); }
+    </style>
+  </defs>
+  <rect width="1500" height="690" fill="#f3f6fb"/>
+  <text x="54" y="62" class="title">Inspect the request before it reaches the model</text>
+  <text x="56" y="94" class="sub">APIM calls the Content Safety backend with managed identity and enforces the policy decision.</text>
+
+  <rect x="55" y="246" width="260" height="140" rx="20" fill="#fff" stroke="#d3ddeb" stroke-width="2"/>
+  <text x="86" y="290" class="head">Client</text>
+  <text x="86" y="326" class="body">Submits model request</text>
+  <text x="86" y="356" class="body">to the APIM endpoint</text>
+
+  <rect x="420" y="200" width="360" height="230" rx="22" fill="#edf6ff" stroke="#9fc7ea" stroke-width="2"/>
+  <text x="454" y="246" class="head">APIM inbound policy</text>
+  <text x="454" y="287" class="body">Prompt Shields check</text>
+  <text x="454" y="319" class="body">Configured harm thresholds</text>
+  <text x="454" y="351" class="body">Decision before backend call</text>
+  <text x="454" y="394" class="body">llm-content-safety</text>
+
+  <rect x="922" y="162" width="290" height="130" rx="20" fill="#fff" stroke="#a8d7c6" stroke-width="2"/>
+  <text x="955" y="205" class="head">Safe request</text>
+  <text x="955" y="241" class="body">Forward to Foundry model</text>
+  <text x="955" y="270" class="body">and return the response</text>
+
+  <rect x="922" y="486" width="290" height="130" rx="20" fill="#fff4f2" stroke="#e5aaaa" stroke-width="2"/>
+  <text x="955" y="529" class="head">Detected attack</text>
+  <text x="955" y="565" class="body">Block at the gateway</text>
+  <text x="955" y="594" class="body">Return 403 to the client</text>
+
+  <rect x="1242" y="294" width="210" height="122" rx="20" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="1268" y="335" class="head">Content Safety</text>
+  <text x="1268" y="369" class="body">policy backend</text>
+  <text x="1268" y="397" class="body">managed identity</text>
+
+  <path d="M326 316 H405" class="edge"/>
+  <path d="M790 274 H905" class="safe"/>
+  <path d="M790 355 H850 V551 H905" class="blocked"/>
+  <path d="M780 315 H1225" class="edge"/>
+</svg>

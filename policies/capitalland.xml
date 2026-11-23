@@ -1,0 +1,65 @@
+<policies>
+    <inbound>
+        <base />
+        <set-backend-service backend-id="@{
+            // Determine what backend pool we use.
+            switch(context.Request.MatchedParameters["deployment-id"]) {
+                case "gpt4o":
+                    return "aoai-lb-gpt4o";
+
+                case "GPT4prod":
+                    return "aoai-lb-gpt4-32k";
+
+                case "o4-mini":
+                    return "aoai-lb-o4-mini";
+
+                case "EMBEDDINGprod":
+                    return "aoai-lb-ada-002";
+
+                case "text-embedding-3-large":
+                    return "aoai-lb-embedding-3-large";
+
+                case "text-embedding-3-small":
+                    return "aoai-lb-embedding-3-small";
+
+                default:
+                    return "aoai-lb-gpt4o";
+            }
+        }" />
+        <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="managed-id-access-token" ignore-error="false" />
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer " + (string)context.Variables["managed-id-access-token"])</value>
+        </set-header>
+    </inbound>
+    <backend>
+        <!--Apply load-balancing and retry mechanisms -->
+        <!--Set count to one less than the number of backends in the pool to try all backends until the backend pool is temporarily unavailable.-->
+        <retry count="2" interval="0" first-fast-retry="true" condition="@(context.Response.StatusCode == 429 || context.Response.StatusCode == 404 || (context.Response.StatusCode == 503 && !context.Response.StatusReason.Contains("Backend pool") && !context.Response.StatusReason.Contains("is temporarily unavailable")))">
+            <forward-request buffer-request-body="true" />
+        </retry>
+    </backend>
+    <outbound>
+        <base />
+        <!-- This will return the used backend URL in the HTTP header response. Remove it if you don't want to expose this data -->
+        <set-header name="x-openai-backendurl" exists-action="override">
+            <value>@(context.Variables.GetValueOrDefault<string>("backendUrl", "none"))</value>
+        </set-header>
+        <choose>
+            <when condition="@(context.Response.StatusCode >= 200 && context.Response.StatusCode < 300)">
+                <log-to-eventhub logger-id="eventhub">@{
+                    return new JObject(
+                            new JProperty("EventTime", DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH:mm:sszzz")),
+                            new JProperty("RequestId", context.RequestId),
+                            new JProperty("ProductId", context.Product.Id),
+                            new JProperty("EndpointUrl", context.Request.Url.ToString()),
+                            new JProperty("RequestBody", context.Request.Body.As<string>(preserveContent: true)),
+                            new JProperty("ResponseBody", context.Response.Body.As<string>(preserveContent: true))
+                        ).ToString(Newtonsoft.Json.Formatting.None);
+                    }</log-to-eventhub>
+            </when>
+        </choose>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

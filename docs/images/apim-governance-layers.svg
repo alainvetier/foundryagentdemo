@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900" role="img" aria-labelledby="title desc">
+  <title id="title">Three API Management governance layers in the Whisker Works demo</title>
+  <desc id="desc">Three horizontal rows show models, MCP tools, and A2A agents routed through Azure API Management, with their policies and backends.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#58677e"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 34px; font-weight: 750; }
+      .sub { font-size: 17px; fill: #596980; }
+      .layer { font-size: 21px; font-weight: 750; }
+      .head { font-size: 17px; font-weight: 700; }
+      .body { font-size: 15px; fill: #4c5d73; }
+      .muted { font-size: 13px; fill: #66758a; }
+      .route { fill: none; stroke: #58677e; stroke-width: 3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1500" height="900" fill="#f3f6fb"/>
+  <text x="56" y="65" class="title">One gateway. Three governance layers.</text>
+  <text x="58" y="98" class="sub">Each layer protects a different boundary in an agentic application.</text>
+
+  <rect x="45" y="138" width="1410" height="195" rx="22" fill="#edf6ff" stroke="#9fc7ea" stroke-width="2"/>
+  <rect x="45" y="354" width="1410" height="195" rx="22" fill="#eff9f5" stroke="#a8d7c6" stroke-width="2"/>
+  <rect x="45" y="570" width="1410" height="195" rx="22" fill="#f5f0ff" stroke="#c3b2ec" stroke-width="2"/>
+
+  <text x="76" y="183" class="layer" fill="#126db1">01  Models</text>
+  <text x="76" y="216" class="body">Apps and agents</text>
+  <rect x="290" y="168" width="350" height="126" rx="16" fill="#fff" stroke="#9fc7ea" stroke-width="2"/>
+  <text x="318" y="205" class="head">APIM Foundry Models API</text>
+  <text x="318" y="237" class="body">Token limits by product</text>
+  <text x="318" y="265" class="body">Content Safety · managed identity</text>
+  <path d="M222 230 H278" class="route"/>
+  <path d="M650 230 H763" class="route"/>
+  <rect x="780" y="168" width="310" height="126" rx="16" fill="#fff" stroke="#9fc7ea" stroke-width="2"/>
+  <text x="810" y="205" class="head">Foundry model deployments</text>
+  <text x="810" y="237" class="body">gpt-4.1-mini · gpt-5-mini</text>
+  <text x="810" y="265" class="muted">Backend identity is held by APIM</text>
+  <rect x="1140" y="168" width="270" height="126" rx="16" fill="#fff" stroke="#d5dfeb" stroke-width="2"/>
+  <text x="1168" y="205" class="head">Visibility</text>
+  <text x="1168" y="237" class="body">Token metrics by product</text>
+  <text x="1168" y="265" class="body">and client application</text>
+  <path d="M1095 230 H1128" class="route"/>
+
+  <text x="76" y="399" class="layer" fill="#16806f">02  Tools | MCP</text>
+  <text x="76" y="432" class="body">Agents and MCP clients</text>
+  <rect x="290" y="384" width="350" height="126" rx="16" fill="#fff" stroke="#a8d7c6" stroke-width="2"/>
+  <text x="318" y="421" class="head">APIM MCP servers</text>
+  <text x="318" y="453" class="body">whisker-mcp · learn-mcp</text>
+  <text x="318" y="481" class="body">Products · tool list · rate limits</text>
+  <path d="M222 446 H278" class="route"/>
+  <path d="M650 446 H763" class="route"/>
+  <rect x="780" y="384" width="310" height="126" rx="16" fill="#fff" stroke="#a8d7c6" stroke-width="2"/>
+  <text x="810" y="421" class="head">Tool backends</text>
+  <text x="810" y="453" class="body">Whisker Works Store API</text>
+  <text x="810" y="481" class="body">Microsoft Learn MCP</text>
+  <rect x="1140" y="384" width="270" height="126" rx="16" fill="#fff" stroke="#d5dfeb" stroke-width="2"/>
+  <text x="1168" y="421" class="head">Visibility</text>
+  <text x="1168" y="453" class="body">Request traces and</text>
+  <text x="1168" y="481" class="body">agent attribution</text>
+  <path d="M1095 446 H1128" class="route"/>
+
+  <text x="76" y="615" class="layer" fill="#6948b4">03  Agents | A2A</text>
+  <text x="76" y="648" class="body">Agent callers</text>
+  <rect x="290" y="600" width="350" height="126" rx="16" fill="#fff" stroke="#c3b2ec" stroke-width="2"/>
+  <text x="318" y="637" class="head">APIM A2A API</text>
+  <text x="318" y="669" class="body">Subscription · rate limits</text>
+  <text x="318" y="697" class="body">Prompt Shields · card rewrite</text>
+  <path d="M222 662 H278" class="route"/>
+  <path d="M650 662 H763" class="route"/>
+  <rect x="780" y="600" width="310" height="126" rx="16" fill="#fff" stroke="#c3b2ec" stroke-width="2"/>
+  <text x="810" y="637" class="head">Feline Wellness A2A agent</text>
+  <text x="810" y="669" class="body">Dr. Meowgan Freeman</text>
+  <text x="810" y="697" class="muted">Calls models through Layer 1</text>
+  <rect x="1140" y="600" width="270" height="126" rx="16" fill="#fff" stroke="#d5dfeb" stroke-width="2"/>
+  <text x="1168" y="637" class="head">Visibility</text>
+  <text x="1168" y="669" class="body">Agent and caller metrics</text>
+  <text x="1168" y="697" class="body">End-to-end traces</text>
+  <path d="M1095 662 H1128" class="route"/>
+
+  <rect x="290" y="799" width="1120" height="58" rx="16" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="331" y="836" class="head">Shared control plane</text>
+  <text x="550" y="836" class="body">Products · subscriptions · policies · analytics · Application Insights</text>
+</svg>

@@ -1,0 +1,10 @@
+{
+        "messages": [
+            {
+                "role": "user",
+                "content": "I am going to Paris, what should I see?"
+            }
+        ],
+        "max_completion_tokens": 16384,
+        "model": "gpt-5-mini"
+    }

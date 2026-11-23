@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="650" viewBox="0 0 1450 650" role="img" aria-labelledby="title desc">
+  <title id="title">APIM model gateway request path</title>
+  <desc id="desc">An application sends a model request with an APIM subscription. APIM applies token limits and Content Safety, authenticates to Foundry using managed identity, and records token metrics.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/></marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 16px; fill: #596980; }
+      .head { font-size: 20px; font-weight: 700; }
+      .body { font-size: 15px; fill: #4c5d73; }
+      .tiny { font-size: 13px; fill: #65748a; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 4; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1450" height="650" fill="#f3f6fb"/>
+  <text x="54" y="62" class="title">Model requests pass through a governed gateway</text>
+  <text x="56" y="94" class="sub">The client authenticates to APIM; APIM uses managed identity to reach Foundry.</text>
+
+  <rect x="55" y="190" width="280" height="170" rx="20" fill="#fff" stroke="#d3ddeb" stroke-width="2"/>
+  <text x="84" y="232" class="head">Application or agent</text>
+  <text x="84" y="270" class="body">APIM subscription</text>
+  <text x="84" y="301" class="body">API request to /models</text>
+  <text x="84" y="335" class="tiny">Gold or Bronze product</text>
+
+  <rect x="500" y="160" width="425" height="250" rx="22" fill="#edf6ff" stroke="#9fc7ea" stroke-width="2"/>
+  <text x="536" y="205" class="head">APIM Foundry Models API</text>
+  <rect x="536" y="231" width="354" height="45" rx="11" fill="#fff" stroke="#bfdaf3"/>
+  <text x="556" y="260" class="body">Token budget by product</text>
+  <rect x="536" y="289" width="354" height="45" rx="11" fill="#fff" stroke="#bfdaf3"/>
+  <text x="556" y="318" class="body">Content Safety and Prompt Shields</text>
+  <rect x="536" y="347" width="354" height="42" rx="11" fill="#fff" stroke="#bfdaf3"/>
+  <text x="556" y="375" class="body">Managed identity to Foundry</text>
+
+  <rect x="1090" y="190" width="300" height="170" rx="20" fill="#f4f0ff" stroke="#bca9ef" stroke-width="2"/>
+  <text x="1120" y="232" class="head">Foundry model</text>
+  <text x="1120" y="270" class="body">gpt-4.1-mini</text>
+  <text x="1120" y="301" class="body">or gpt-5-mini</text>
+  <text x="1120" y="335" class="tiny">No model key in the client</text>
+
+  <path d="M346 276 H485" class="edge"/>
+  <path d="M936 276 H1075" class="edge"/>
+  <text x="375" y="254" class="tiny">subscription key</text>
+  <text x="957" y="254" class="tiny">managed identity</text>
+
+  <rect x="500" y="472" width="425" height="106" rx="18" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="536" y="514" class="head">Application Insights</text>
+  <text x="536" y="546" class="body">Token metrics by product and client app</text>
+  <path d="M710 412 V458" class="edge"/>
+</svg>

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Whisker Works - purr-fectly engineered goods for cats</title>
+  <style>
+    :root { --ink:#1d1b2f; --accent:#ff7a59; --bg:#fff8f1; --card:#ffffff; --muted:#6b6880; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, sans-serif; background:var(--bg); color:var(--ink); }
+    header { padding:2rem; background:var(--ink); color:#fff; }
+    header h1 { margin:0; font-size:2rem; }
+    header p { margin:.25rem 0 0; color:#c9c6e0; }
+    main { display:grid; grid-template-columns: 1fr 360px; gap:1.5rem; padding:1.5rem; }
+    .grid { display:grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap:1rem; }
+    .card { background:var(--card); border-radius:12px; padding:1rem; box-shadow:0 2px 6px rgba(0,0,0,.06); }
+    .card h3 { margin:.2rem 0; font-size:1rem; }
+    .price { color:var(--accent); font-weight:700; }
+    .muted { color:var(--muted); font-size:.85rem; }
+    .badge { font-size:.7rem; padding:.1rem .4rem; border-radius:6px; background:#eee; }
+    .badge.out { background:#ffd6d6; } .badge.low { background:#fff0c2; }
+    .team { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; }
+    .team div { background:#fff; border-radius:12px; padding:.6rem .9rem; font-size:.85rem; }
+    aside { position:sticky; top:1rem; align-self:start; }
+    #log { height:380px; overflow:auto; background:#fff; border-radius:12px; padding:.75rem; font-size:.9rem; }
+    .msg { margin:.4rem 0; white-space:pre-wrap; } .me { text-align:right; color:#3a3; } .bot { color:var(--ink); }
+    form { display:flex; gap:.5rem; margin-top:.5rem; }
+    input { flex:1; padding:.6rem; border-radius:8px; border:1px solid #ccc; }
+    button { background:var(--accent); color:#fff; border:none; padding:.6rem 1rem; border-radius:8px; cursor:pointer; }
+    button:disabled { opacity:.6; cursor:wait; }
+    #fact { font-style:italic; color:#c9c6e0; margin-top:.5rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🐾 Whisker Works</h1>
+    <p>Purr-fectly engineered goods for cats and their humans. Run by techie cats since 2019.</p>
+    <div id="fact"></div>
+  </header>
+  <main>
+    <section>
+      <div class="team">
+        <div>👑 <b>Sir Purrcival Byte</b><br/>Chief Executive Mouser</div>
+        <div>🧠 <b>Null Pointer</b><br/>CTO (tabby, opinionated)</div>
+        <div>🛠️ <b>Kernel Panic</b><br/>Head of DevOps (black cat)</div>
+        <div>💬 <b>Miss Kittens-Debug</b><br/>Customer Support Lead</div>
+      </div>
+      <div id="products" class="grid"></div>
+    </section>
+    <aside>
+      <h2>Ask Whiskers 🐱</h2>
+      <div id="log"><div class="msg bot">Meow! I'm Whiskers, the store concierge. Ask me about products, orders or cat care.</div></div>
+      <form id="chat">
+        <input id="q" placeholder="Do you have a heated bed in stock?" autocomplete="off" />
+        <button>Send</button>
+      </form>
+    </aside>
+  </main>
+  <script>
+    const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt !== undefined) e.textContent = txt; return e; };
+    async function loadProducts() {
+      const res = await fetch('/api/products');
+      const items = await res.json();
+      const grid = document.getElementById('products');
+      for (const p of items) {
+        const card = el('div', 'card');
+        card.append(el('div', 'muted', `${p.id} · ${p.category}`));
+        card.append(el('h3', '', p.name));
+        card.append(el('div', 'price', `$${p.price.toFixed(2)}`));
+        const badge = el('span', 'badge ' + (p.stock === 0 ? 'out' : p.stock < 5 ? 'low' : ''), p.stock === 0 ? 'out of stock' : `${p.stock} in stock`);
+        card.append(badge);
+        card.append(el('p', 'muted', p.description));
+        grid.append(card);
+      }
+    }
+    async function loadFact() {
+      const res = await fetch('/api/catfacts/random');
+      document.getElementById('fact').textContent = (await res.json()).fact;
+    }
+    let previousResponseId = null;
+    let chatPending = false;
+    document.getElementById('chat').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (chatPending) return;
+      const q = document.getElementById('q');
+      const send = document.querySelector('#chat button');
+      const log = document.getElementById('log');
+      const text = q.value.trim(); if (!text) return;
+      chatPending = true; send.disabled = true;
+      log.append(el('div', 'msg me', text)); q.value = '';
+      const thinking = el('div', 'msg bot', '…thinking (and grooming)…'); log.append(thinking);
+      try {
+        const res = await fetch('/api/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: text, previousResponseId }) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || res.statusText);
+        previousResponseId = data.responseId;
+        thinking.textContent = data.reply;
+      } catch (err) { thinking.textContent = '😿 ' + err.message; }
+      finally { chatPending = false; send.disabled = false; }
+      log.scrollTop = log.scrollHeight;
+    });
+    loadProducts(); loadFact();
+  </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="650" viewBox="0 0 1400 650" role="img" aria-labelledby="title desc">
+  <title id="title">Store API exposed to agents as an APIM MCP server</title>
+  <desc id="desc">A Foundry agent discovers read-only store tools through the APIM whisker-mcp server. APIM applies product access, subscription, rate limits, and tracing before forwarding calls to the Store API.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/></marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 16px; fill: #596980; }
+      .head { font-size: 21px; font-weight: 700; }
+      .body { font-size: 16px; fill: #4c5d73; }
+      .tiny { font-size: 13px; fill: #65748a; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 4; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1400" height="650" fill="#f3f6fb"/>
+  <text x="54" y="62" class="title">From REST operations to governed agent tools</text>
+  <text x="56" y="94" class="sub">MCP gives agents a standard way to discover and call selected Store API operations.</text>
+
+  <rect x="55" y="160" width="350" height="270" rx="22" fill="#f4f0ff" stroke="#bca9ef" stroke-width="2"/>
+  <text x="88" y="207" class="head">Foundry agent</text>
+  <text x="88" y="243" class="body">whiskers-concierge</text>
+  <text x="88" y="272" class="body">or whiskers-concierge-pro</text>
+  <rect x="88" y="310" width="282" height="83" rx="14" fill="#fff" stroke="#d7ccf5" stroke-width="2"/>
+  <text x="110" y="343" class="body">Discovers tools</text>
+  <text x="110" y="372" class="tiny">Calls tools only when relevant</text>
+
+  <rect x="523" y="160" width="355" height="270" rx="22" fill="#edf6ff" stroke="#9fc7ea" stroke-width="2"/>
+  <text x="556" y="207" class="head">APIM MCP server</text>
+  <text x="556" y="243" class="body">whisker-mcp</text>
+  <rect x="556" y="267" width="289" height="126" rx="14" fill="#fff" stroke="#bfdaf3" stroke-width="2"/>
+  <text x="578" y="300" class="body">Gold / Bronze products</text>
+  <text x="578" y="331" class="body">Subscription and rate limit</text>
+  <text x="578" y="362" class="body">Policy and diagnostics</text>
+
+  <rect x="995" y="160" width="350" height="270" rx="22" fill="#fff5e9" stroke="#e8bd87" stroke-width="2"/>
+  <text x="1028" y="207" class="head">Whisker Works Store API</text>
+  <text x="1028" y="251" class="body">Product search and details</text>
+  <text x="1028" y="283" class="body">Live inventory and order status</text>
+  <text x="1028" y="315" class="body">Cat facts</text>
+  <text x="1028" y="369" class="tiny">REST API remains the backend</text>
+
+  <path d="M417 294 H510" class="edge"/>
+  <path d="M890 294 H982" class="edge"/>
+  <text x="426" y="275" class="tiny">MCP discovery and tool calls</text>
+  <text x="900" y="275" class="tiny">REST operation</text>
+
+  <rect x="55" y="486" width="1290" height="112" rx="18" fill="#fff" stroke="#d7dfeb" stroke-width="2"/>
+  <text x="88" y="530" class="head">Least privilege by design</text>
+  <text x="88" y="565" class="body">The default server is read-only. Test order approval separately with the isolated write server.</text>
+  <text x="88" y="589" class="tiny">Use the actual tool names discovered in APIM; they may differ from REST operation IDs.</text>
+</svg>

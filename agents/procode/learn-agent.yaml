@@ -1,0 +1,15 @@
+name: whisker-learn-guide
+description: "Professor Purr: read-only Microsoft Learn MCP guide, isolated from store and order agents"
+model: gpt-4.1-mini
+instructions_file: learn-instructions.md
+
+mcp:
+  enabled: true
+  server_label: microsoft_learn
+  path: learn-mcp
+  project_connection_name: whisker-learn
+  require_approval: never
+  allowed_tools:
+    - microsoft_docs_search
+    - microsoft_docs_fetch
+    - microsoft_code_sample_search

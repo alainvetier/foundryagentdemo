@@ -1,0 +1,18 @@
+{
+  "inputs": [
+    { "type": "promptString", "id": "apim-gateway-hostname", "description": "APIM hostname ONLY (no https://, path or trailing slash), e.g. whisker-apim-abc123.azure-api.net" },
+    { "type": "promptString", "id": "apim-key", "description": "APIM subscription key (Gold or Bronze)", "password": true }
+  ],
+  "servers": {
+    "whisker-works-via-apim": {
+      "type": "http",
+      "url": "https://${input:apim-gateway-hostname}/whisker-mcp/mcp",
+      "headers": { "Ocp-Apim-Subscription-Key": "${input:apim-key}" }
+    },
+    "ms-learn-via-apim": {
+      "type": "http",
+      "url": "https://${input:apim-gateway-hostname}/learn-mcp/api/mcp",
+      "headers": { "Ocp-Apim-Subscription-Key": "${input:apim-key}" }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="780" viewBox="0 0 1400 780" role="img" aria-labelledby="title desc">
+  <title id="title">Foundry agent runtime and tool cycle</title>
+  <desc id="desc">Instructions, conversation state, and a model enter the agent runtime. It can retrieve knowledge or call governed tools, observe results, and produce an answer.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#16877a"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 16px; fill: #596980; }
+      .head { font-size: 19px; font-weight: 700; }
+      .body { font-size: 15px; fill: #4c5d73; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 3; marker-end: url(#arrow); }
+      .green { fill: none; stroke: #16877a; stroke-width: 3; marker-end: url(#arrowGreen); }
+    </style>
+  </defs>
+  <rect width="1400" height="780" fill="#f3f6fb"/>
+  <text x="52" y="62" class="title">Inside the agent: reason, retrieve, act, respond</text>
+  <text x="54" y="94" class="sub">The model chooses a next step; the runtime executes tools and returns their results to the model.</text>
+
+  <rect x="60" y="160" width="290" height="132" rx="18" fill="#fff" stroke="#bca9ef" stroke-width="2"/>
+  <text x="88" y="201" class="head">Instructions</text>
+  <text x="88" y="235" class="body">Role, scope, style, guardrails</text>
+  <text x="88" y="263" class="body">Whiskers: friendly store concierge</text>
+
+  <rect x="60" y="340" width="290" height="132" rx="18" fill="#fff" stroke="#bca9ef" stroke-width="2"/>
+  <text x="88" y="381" class="head">Conversation</text>
+  <text x="88" y="415" class="body">Current question and prior turns</text>
+  <text x="88" y="443" class="body">Responses API conversation state</text>
+
+  <rect x="60" y="520" width="290" height="132" rx="18" fill="#fff" stroke="#bca9ef" stroke-width="2"/>
+  <text x="88" y="561" class="head">Model</text>
+  <text x="88" y="595" class="body">Understands and selects next step</text>
+  <text x="88" y="623" class="body">gpt-4.1-mini or gpt-5-mini</text>
+
+  <rect x="510" y="290" width="350" height="230" rx="26" fill="#eee8ff" stroke="#9776dd" stroke-width="3"/>
+  <text x="555" y="350" class="head">Foundry agent runtime</text>
+  <text x="555" y="390" class="body">1. Assemble context</text>
+  <text x="555" y="423" class="body">2. Ask the model what to do</text>
+  <text x="555" y="456" class="body">3. Run selected retrieval or tool</text>
+  <text x="555" y="489" class="body">4. Return result and continue</text>
+
+  <rect x="1040" y="170" width="290" height="150" rx="18" fill="#e8f7f2" stroke="#92ceb8" stroke-width="2"/>
+  <text x="1070" y="212" class="head">Knowledge</text>
+  <text x="1070" y="246" class="body">File search grounds answers</text>
+  <text x="1070" y="276" class="body">Policies · products · cat care</text>
+
+  <rect x="1040" y="385" width="290" height="150" rx="18" fill="#e8f7f2" stroke="#92ceb8" stroke-width="2"/>
+  <text x="1070" y="427" class="head">Tools</text>
+  <text x="1070" y="461" class="body">MCP: live store data via APIM</text>
+  <text x="1070" y="491" class="body">Code Interpreter: sales analysis</text>
+
+  <rect x="1040" y="600" width="290" height="105" rx="18" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="1070" y="642" class="head">Answer</text>
+  <text x="1070" y="674" class="body">Grounded response to the customer</text>
+
+  <path d="M350 226 H425 V330 H497" class="edge"/>
+  <path d="M350 406 H497" class="edge"/>
+  <path d="M350 586 H425 V480 H497" class="edge"/>
+  <path d="M873 340 H950 V245 H1027" class="green"/>
+  <path d="M873 405 H1027" class="green"/>
+  <path d="M1185 328 V366" class="edge"/>
+  <path d="M1185 543 V581" class="edge"/>
+  <path d="M1027 651 H920 V545 H685 V530" class="edge"/>
+  <text x="894" y="555" class="body">Tool result returns to the runtime</text>
+</svg>

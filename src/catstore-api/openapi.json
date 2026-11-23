@@ -1,0 +1,146 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Whisker Works Store API",
+    "description": "Products, inventory, orders and cat facts for Whisker Works - the retail store run by techie cats.",
+    "version": "1.0.0"
+  },
+  "servers": [{ "url": "https://localhost/api" }],
+  "paths": {
+    "/products": {
+      "get": {
+        "operationId": "listProducts",
+        "summary": "List or search products",
+        "description": "Returns the Whisker Works product catalog. Optionally filter by category (toys, beds, furniture, food, accessories) or a free-text search term.",
+        "parameters": [
+          { "name": "category", "in": "query", "required": false, "description": "Product category: toys, beds, furniture, food or accessories.", "schema": { "type": "string" } },
+          { "name": "q", "in": "query", "required": false, "description": "Free-text search on name, description and tags.", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "List of products", "content": { "application/json": { "schema": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } } } } }
+        }
+      }
+    },
+    "/products/{productId}": {
+      "get": {
+        "operationId": "getProduct",
+        "summary": "Get a product",
+        "description": "Returns details for one product by its ID (format WW-001).",
+        "parameters": [
+          { "name": "productId", "in": "path", "required": true, "description": "Product ID, e.g. WW-001.", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Product", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Product" } } } },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/inventory/{productId}": {
+      "get": {
+        "operationId": "checkInventory",
+        "summary": "Check stock level",
+        "description": "Returns the current stock level and status (in_stock, low_stock, out_of_stock) for a product.",
+        "parameters": [
+          { "name": "productId", "in": "path", "required": true, "description": "Product ID, e.g. WW-001.", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Inventory", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Inventory" } } } },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "operationId": "placeOrder",
+        "summary": "Place an order",
+        "description": "Places a new order for one or more products. Decrements stock. Returns the created order with its ID.",
+        "requestBody": {
+          "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/OrderRequest" } } }
+        },
+        "responses": {
+          "201": { "description": "Order created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Order" } } } },
+          "409": { "description": "Insufficient stock" }
+        }
+      }
+    },
+    "/orders/{orderId}": {
+      "get": {
+        "operationId": "getOrder",
+        "summary": "Get order status",
+        "description": "Returns an order and its status (processing, shipped, delivered) by order ID, e.g. ORD-1001.",
+        "parameters": [
+          { "name": "orderId", "in": "path", "required": true, "description": "Order ID, e.g. ORD-1001.", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Order", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Order" } } } },
+          "404": { "description": "Not found" }
+        }
+      }
+    },
+    "/catfacts/random": {
+      "get": {
+        "operationId": "getRandomCatFact",
+        "summary": "Get a random cat fact",
+        "description": "Returns a random (slightly nerdy) cat fact.",
+        "responses": {
+          "200": { "description": "Cat fact", "content": { "application/json": { "schema": { "type": "object", "properties": { "fact": { "type": "string" } } } } } }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "category": { "type": "string" },
+          "price": { "type": "number" },
+          "stock": { "type": "integer" },
+          "rating": { "type": "number" },
+          "description": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+      "Inventory": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "string" },
+          "stock": { "type": "integer" },
+          "status": { "type": "string" }
+        }
+      },
+      "OrderItem": {
+        "type": "object",
+        "required": ["productId", "quantity"],
+        "properties": {
+          "productId": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1, "maximum": 20 }
+        }
+      },
+      "OrderRequest": {
+        "type": "object",
+        "required": ["customerName", "shippingCountry", "items"],
+        "properties": {
+          "customerName": { "type": "string" },
+          "shippingCountry": { "type": "string", "description": "ISO 3166-1 alpha-2 country code" },
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/OrderItem" } }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderId": { "type": "string" },
+          "customerName": { "type": "string" },
+          "status": { "type": "string" },
+          "shippingCountry": { "type": "string" },
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/OrderItem" } },
+          "total": { "type": "number" },
+          "createdAt": { "type": "string" }
+        }
+      }
+    }
+  }
+}

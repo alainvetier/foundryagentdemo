@@ -1,0 +1,52 @@
+<!--
+  LAYER 1 - MODELS governance (applied to the "Foundry Models (AI Gateway)" API)
+  - Keyless backend auth with APIM managed identity (client keys never reach Foundry)
+  - Prompt Shields + harm categories through Azure AI Content Safety
+  - Per-subscription token budgets that differ by product (Bronze vs Gold)
+  - Token metrics with dimensions -> Application Insights (chargeback / showback)
+  - Retry on 429 + backend circuit breaker (configured on the backend)
+-->
+<policies>
+    <inbound>
+        <base />
+        <set-backend-service backend-id="whisker-foundry-models" />
+        <authentication-managed-identity resource="https://cognitiveservices.azure.com" />
+        <set-header name="api-key" exists-action="delete" />
+        <llm-content-safety backend-id="whisker-content-safety" shield-prompt="true">
+            <categories output-type="EightSeverityLevels">
+                <category name="Hate" threshold="4" />
+                <category name="Violence" threshold="4" />
+                <category name="SelfHarm" threshold="4" />
+                <category name="Sexual" threshold="4" />
+            </categories>
+        </llm-content-safety>
+        <choose>
+            <when condition="@(context.Product != null && context.Product.Id == "whisker-gold")">
+                <llm-token-limit counter-key="@(context.Subscription.Id)" tokens-per-minute="20000" estimate-prompt-tokens="true" remaining-tokens-header-name="x-remaining-tokens" tokens-consumed-header-name="x-consumed-tokens" />
+            </when>
+            <otherwise>
+                <llm-token-limit counter-key="@(context.Subscription.Id)" tokens-per-minute="500" estimate-prompt-tokens="true" remaining-tokens-header-name="x-remaining-tokens" tokens-consumed-header-name="x-consumed-tokens" />
+            </otherwise>
+        </choose>
+        <llm-emit-token-metric namespace="whisker-works">
+            <dimension name="Subscription ID" />
+            <dimension name="Product ID" />
+            <dimension name="API ID" />
+            <dimension name="Client App" value="@(context.Request.Headers.GetValueOrDefault("x-client-app", "unknown"))" />
+        </llm-emit-token-metric>
+    </inbound>
+    <backend>
+        <retry condition="@(context.Response.StatusCode == 429)" count="2" interval="1" first-fast-retry="true">
+            <forward-request buffer-response="false" />
+        </retry>
+    </backend>
+    <outbound>
+        <base />
+        <set-header name="x-whisker-gateway" exists-action="override">
+            <value>purr-approved</value>
+        </set-header>
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

@@ -1,0 +1,48 @@
+<!--
+  LAYER 2 - TOOLS governance (paste into: APIM > MCP Servers > <server> > Policies)
+  - Throttle tools/call per MCP API and subscription (fallback: client IP)
+  - Initialization, discovery, notifications and SSE connections do not consume the tool budget
+  - Trace which agent called which MCP server (shows up in App Insights / Test console trace)
+  - Optional: Prompt Shields on tool arguments (uncomment during the demo)
+  NOTE: never read context.Response.Body in MCP policies - it breaks streaming.
+  DEMO TIP: set calls="3" to trigger a 429 live.
+-->
+<policies>
+    <inbound>
+        <base />
+        <choose>
+            <when condition="@{
+                if (context.Request.Method != &quot;POST&quot; || context.Request.Body == null) {
+                    return false;
+                }
+                try {
+                    var body = context.Request.Body.As&lt;JToken&gt;(preserveContent: true);
+                    return body == null || body.Type != JTokenType.Object
+                        || body[&quot;method&quot;]?.Type != JTokenType.String
+                        || (string)body[&quot;method&quot;] == &quot;tools/call&quot;;
+                }
+                catch (Newtonsoft.Json.JsonReaderException) {
+                    context.Trace(&quot;Malformed MCP JSON; applying the tool limit before MCP validation.&quot;);
+                    return true;
+                }
+            }">
+                <rate-limit-by-key calls="30" renewal-period="60" counter-key="@(&quot;whisker-mcp:&quot; + context.Api.Id + &quot;:&quot; + (context.Subscription?.Id ?? context.Request.IpAddress))" remaining-calls-header-name="x-remaining-tool-calls" retry-after-header-name="Retry-After" />
+            </when>
+        </choose>
+        <!--
+        <llm-content-safety backend-id="whisker-content-safety" shield-prompt="true" />
+        -->
+        <trace source="whisker-mcp" severity="information">
+            <message>@($"MCP call | agent={context.Request.Headers.GetValueOrDefault("x-agent-id", "unknown")} | subscription={context.Subscription?.Name ?? "none"}")</message>
+        </trace>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

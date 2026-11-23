@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1550" height="790" viewBox="0 0 1550 790" role="img" aria-labelledby="title desc">
+  <title id="title">A2A agent request governed by APIM</title>
+  <desc id="desc">An A2A caller retrieves a gateway-rewritten agent card and sends a JSON-RPC message through APIM. APIM applies subscription, rate-limit, safety, and telemetry policies before forwarding it to the wellness agent, which calls the model through the APIM Models API.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/></marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 16px; fill: #596980; }
+      .head { font-size: 19px; font-weight: 700; }
+      .body { font-size: 15px; fill: #4c5d73; }
+      .tiny { font-size: 13px; fill: #65748a; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 3; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1550" height="790" fill="#f3f6fb"/>
+  <text x="54" y="62" class="title">Agent-to-agent calls share the gateway control plane</text>
+  <text x="56" y="94" class="sub">The A2A card points callers to APIM, while the remote agent's model request is governed too.</text>
+
+  <rect x="55" y="250" width="250" height="176" rx="20" fill="#fff" stroke="#d3ddeb" stroke-width="2"/>
+  <text x="84" y="292" class="head">A2A caller</text>
+  <text x="84" y="330" class="body">Fetches agent card</text>
+  <text x="84" y="360" class="body">Sends JSON-RPC message</text>
+  <text x="84" y="398" class="tiny">Gold product subscription</text>
+
+  <rect x="398" y="208" width="365" height="257" rx="22" fill="#edf6ff" stroke="#9fc7ea" stroke-width="2"/>
+  <text x="432" y="252" class="head">APIM A2A API</text>
+  <text x="432" y="292" class="body">Agent card URL rewritten</text>
+  <text x="432" y="325" class="body">Subscription and rate limits</text>
+  <text x="432" y="358" class="body">Prompt Shields and metrics</text>
+  <text x="432" y="407" class="tiny">Base path: wellness-agent</text>
+
+  <rect x="860" y="208" width="300" height="257" rx="22" fill="#fff5e9" stroke="#e8bd87" stroke-width="2"/>
+  <text x="894" y="252" class="head">Wellness A2A agent</text>
+  <text x="894" y="292" class="body">Dr. Meowgan Freeman</text>
+  <text x="894" y="325" class="body">Processes wellness request</text>
+  <text x="894" y="358" class="body">Calls model through /models</text>
+  <text x="894" y="407" class="tiny">Hosted on App Service</text>
+
+  <rect x="1260" y="208" width="245" height="257" rx="22" fill="#f4f0ff" stroke="#bca9ef" stroke-width="2"/>
+  <text x="1288" y="252" class="head">Foundry model</text>
+  <text x="1288" y="292" class="body">APIM Models API</text>
+  <text x="1288" y="325" class="body">Managed identity</text>
+  <text x="1288" y="358" class="body">Token metrics</text>
+  <text x="1288" y="407" class="tiny">Layer 1 policies</text>
+
+  <path d="M316 304 H385" class="edge"/>
+  <path d="M316 380 H385" class="edge"/>
+  <text x="322" y="287" class="tiny">agent card</text>
+  <text x="322" y="414" class="tiny">message/send</text>
+  <path d="M773 336 H847" class="edge"/>
+  <path d="M1170 336 H1247" class="edge"/>
+
+  <rect x="398" y="555" width="762" height="112" rx="18" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="432" y="601" class="head">End-to-end observability</text>
+  <text x="432" y="635" class="body">Follow the caller request through APIM, the agent, and its downstream model call.</text>
+  <path d="M580 468 V537" class="edge"/>
+  <path d="M1010 468 V537" class="edge"/>
+  <path d="M1380 468 V520 H1167 V555" class="edge"/>
+</svg>

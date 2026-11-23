@@ -1,0 +1,10 @@
+**
+!agents/
+!agents/container-app/
+!agents/container-app/main.py
+!agents/container-app/requirements.txt
+!agents/container-app/Dockerfile
+!agents/hosted/
+!agents/hosted/sales.py
+!agents/hosted/data/
+!agents/hosted/data/whisker-sales-2026.csv

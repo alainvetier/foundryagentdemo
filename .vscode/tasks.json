@@ -1,0 +1,25 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Whisker Works: Open Agent Inspector",
+      "type": "shell",
+      "command": "echo '${input:whiskerAgentInspector}'",
+      "presentation": {
+        "reveal": "never"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "whiskerAgentInspector",
+      "type": "command",
+      "command": "ai-mlstudio.openTestTool",
+      "args": {
+        "triggeredFrom": "tasks",
+        "port": 8088
+      }
+    }
+  ]
+}

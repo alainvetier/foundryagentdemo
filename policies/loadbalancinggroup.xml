@@ -1,0 +1,27 @@
+<policies>
+    <inbound>
+        <authentication-managed-identity resource="https://cognitiveservices.azure.com" output-token-variable-name="msi-access-token" ignore-error="false" />
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer " + (string)context.Variables["msi-access-token"])</value>
+        </set-header>
+        <azure-openai-emit-token-metric namespace="genaitest">
+            <dimension name="Subscription ID" />
+            <dimension name="Client IP" value="@(context.Request.IpAddress)" />
+        </azure-openai-emit-token-metric>
+        <azure-openai-token-limit counter-key="@(context.Request.IpAddress)" tokens-per-minute="5000" estimate-prompt-tokens="false" remaining-tokens-variable-name="remainingTokens" />
+        <azure-openai-token-limit counter-key="@(context.Subscription.Id)" token-quota="100000" token-quota-period="Monthly" estimate-prompt-tokens="false" remaining-quota-tokens-variable-name="remainingQuotaTokens" />
+        <base />
+        <set-backend-service backend-id="openai" />
+    </inbound>
+    <backend>
+        <retry condition="@(context.Response.StatusCode == 429)" count="2" interval="1" first-fast-retry="true">
+            <forward-request buffer-response="false" />
+        </retry>
+    </backend>
+    <outbound>
+        <base />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

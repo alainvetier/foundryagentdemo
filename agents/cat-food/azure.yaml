@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+name: whisker-cat-food
+requiredVersions:
+  azd: ">=1.27.1"
+services:
+  purrfessor-nibbles:
+    host: azure.ai.agent
+    project: .
+    language: python
+    kind: hosted
+    name: purrfessor-nibbles
+    description: Whisker Works cat-food specialist built with Microsoft Agent Framework.
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: main.py
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+    environmentVariables:
+      - name: AZURE_AI_MODEL_DEPLOYMENT_NAME
+        value: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+    container:
+      resources:
+        cpu: "0.5"
+        memory: 1Gi
+infra:
+  provider: microsoft.foundry

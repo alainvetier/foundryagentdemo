@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="940" viewBox="0 0 1440 940" role="img" aria-labelledby="title desc">
+  <title id="title">Microsoft Foundry building blocks for agents</title>
+  <desc id="desc">Foundry provides model deployments and a managed agent runtime, with file search, code interpreter, versioning, evaluation, and tracing. Agents can connect to external tools through APIM, which governs access to the Store API.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#53647b"/>
+    </marker>
+    <marker id="arrowPurple" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#7858be"/>
+    </marker>
+    <style>
+      text { font-family: Inter, "Segoe UI", Arial, sans-serif; fill: #17243b; }
+      .title { font-size: 32px; font-weight: 750; }
+      .sub { font-size: 17px; fill: #596980; }
+      .head { font-size: 20px; font-weight: 700; }
+      .body { font-size: 16px; fill: #4c5d73; }
+      .small { font-size: 14px; fill: #596980; }
+      .edge { fill: none; stroke: #53647b; stroke-width: 3; marker-end: url(#arrow); }
+      .purple { fill: none; stroke: #7858be; stroke-width: 3; marker-end: url(#arrowPurple); }
+    </style>
+  </defs>
+  <rect width="1440" height="940" fill="#f3f6fb"/>
+  <text x="54" y="62" class="title">Foundry provides the building blocks behind an agent</text>
+  <text x="56" y="95" class="sub">A managed agent runtime brings models, instructions, knowledge, and tools together, then helps teams improve the agent.</text>
+
+  <rect x="48" y="135" width="1010" height="735" rx="26" fill="#fff" stroke="#9d83d6" stroke-width="3"/>
+  <rect x="48" y="135" width="1010" height="64" rx="24" fill="#eee8ff"/>
+  <path d="M48 174 V199 H1058 V174" fill="#eee8ff"/>
+  <text x="78" y="177" class="head">Microsoft Foundry project</text>
+  <text x="820" y="176" class="small">Managed agent capabilities</text>
+
+  <rect x="88" y="235" width="260" height="142" rx="18" fill="#f7f4ff" stroke="#c8b7ed" stroke-width="2"/>
+  <text x="114" y="276" class="head">Model deployments</text>
+  <text x="114" y="309" class="body">Reason about the request</text>
+  <text x="114" y="337" class="body">Choose a response or tool</text>
+  <text x="114" y="362" class="small">For example, gpt-4.1-mini</text>
+
+  <rect x="410" y="220" width="500" height="190" rx="22" fill="#eee8ff" stroke="#9776dd" stroke-width="3"/>
+  <text x="448" y="263" class="head">Foundry Agent Service</text>
+  <text x="448" y="300" class="body">Instructions define role, scope, and behavior</text>
+  <text x="448" y="332" class="body">Responses API supports conversation turns and state</text>
+  <text x="448" y="364" class="body">Runtime orchestrates retrieval and tool calls</text>
+  <text x="448" y="392" class="small">The model and runtime work together in each turn</text>
+
+  <rect x="88" y="465" width="400" height="155" rx="18" fill="#e8f7f2" stroke="#92ceb8" stroke-width="2"/>
+  <text x="116" y="507" class="head">Ground with knowledge</text>
+  <text x="116" y="541" class="body">File Search + managed vector store</text>
+  <text x="116" y="571" class="body">Retrieve relevant, indexed files</text>
+  <text x="116" y="601" class="small">Optional: connect Azure AI Search or Foundry IQ</text>
+
+  <rect x="520" y="465" width="390" height="155" rx="18" fill="#e8f7f2" stroke="#92ceb8" stroke-width="2"/>
+  <text x="548" y="507" class="head">Act with tools</text>
+  <text x="548" y="541" class="body">Code Interpreter: isolated analysis</text>
+  <text x="548" y="571" class="body">Connect MCP, OpenAPI, or other tools</text>
+  <text x="548" y="601" class="small">Tools return results for the agent to use</text>
+
+  <rect x="88" y="685" width="822" height="130" rx="18" fill="#fffaf0" stroke="#efd6a8" stroke-width="2"/>
+  <text x="116" y="729" class="head">Build, evaluate, and operate</text>
+  <text x="116" y="766" class="body">Version agent definitions  ·  Test in the playground  ·  Evaluate responses  ·  Inspect traces</text>
+  <text x="116" y="795" class="small">Use results to refine instructions, knowledge, tools, or the selected model</text>
+
+  <rect x="1110" y="465" width="280" height="155" rx="18" fill="#edf3fb" stroke="#a9bdd7" stroke-width="2"/>
+  <text x="1140" y="507" class="head">Azure API Management</text>
+  <text x="1140" y="541" class="body">Optional gateway for MCP</text>
+  <text x="1140" y="571" class="body">Controls access and traffic</text>
+  <text x="1140" y="601" class="small">Separate from Foundry</text>
+
+  <rect x="1110" y="685" width="280" height="130" rx="18" fill="#fff" stroke="#a9bdd7" stroke-width="2"/>
+  <text x="1140" y="729" class="head">Connected services</text>
+  <text x="1140" y="766" class="body">Whisker Works Store API</text>
+  <text x="1140" y="795" class="small">Provides live products and stock</text>
+
+  <path d="M350 306 H397" class="purple"/>
+  <path d="M660 414 V443 H290 V452" class="edge"/>
+  <path d="M660 443 H710 V452" class="edge"/>
+  <path d="M922 540 H1097" class="purple"/>
+  <path d="M1250 628 V672" class="edge"/>
+  <text x="938" y="523" class="small">MCP tool calls</text>
+
+  <text x="1110" y="855" class="small">Foundry agents can also use built-in tools</text>
+  <text x="1110" y="878" class="small">without routing them through APIM.</text>
+</svg>

@@ -1,0 +1,33 @@
+# Pro-code agent definition (source of truth, versioned in Git).
+# Changing "model" and merging to main creates a new agent version (see docs/08-change-model-safely.md).
+name: whiskers-concierge-pro
+description: Whisker Works store concierge (pro-code). Grounded on store knowledge, analyzes sales with Code Interpreter, uses Store tools via APIM MCP.
+model: gpt-4.1-mini
+instructions_file: instructions.md
+
+knowledge:
+  vector_store_name: whisker-knowledge
+  files:
+    - ../../data/knowledge/store-policies.md
+    - ../../data/knowledge/product-guide.md
+    - ../../data/knowledge/cat-care-basics.md
+
+code_interpreter:
+  enabled: true
+  files:
+    - ../../data/sales/whisker-sales-2026.csv
+
+mcp:
+  enabled: true
+  server_label: whisker_store
+  # MCP endpoint = ${APIM_GATEWAY_URL}/${APIM_MCP_PATH}/mcp
+  require_approval: never
+  # Optional allow-list: use exact names from tools/list or APIM's Tools blade, not REST operation IDs.
+  # allowed_tools: [listOrSearchProducts, getAProduct, checkStockLevel, getOrderStatus, getARandomCatFact]
+
+# Opt in only after deploying the specialist and configuring its Entra-authenticated connection.
+a2a:
+  enabled: false
+  agent_name: purrfessor-nibbles
+  project_connection_name: whisker-cat-food
+  instructions_file: cat-food-delegation.md
